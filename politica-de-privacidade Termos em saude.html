@@ -1,0 +1,93 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Política de Privacidade - Termos Técnicos em Saúde</title>
+</head>
+<body>
+  <h1>Política de Privacidade - Termos Técnicos em Saúde</h1>
+  <p><strong>Última Atualização:</strong> 16 de Setembro de 2025</p>
+
+  <h2>1. Introdução</h2>
+  <p>Bem-vindo(a) ao aplicativo Termos Técnicos em Saúde. Esta Política de Privacidade explica como coletamos, usamos, armazenamos e protegemos os dados gerados durante o uso do app, além de detalhar suas opções em relação a essas informações. Ao utilizar nosso app, você concorda com as práticas descritas aqui.</p>
+
+  <h2>2. Dados Coletados</h2>
+  <p>O aplicativo Termos Técnicos em Saúde não coleta informações pessoais de forma automática, exceto quando você escolhe interagir com a caixa de mensagens ao desenvolvedor. Os dados coletados incluem:</p>
+  <ul>
+    
+    <li><strong>Dados de Contato (Opcional):</strong> Nome, e-mail e descrição do problema, fornecidos voluntariamente ao enviar uma mensagem ao desenvolvedor pela caixa de mensagens integrada ao app.</li>
+  </ul>
+  <p>Esses dados de contato não são usados para fins comerciais nem compartilhados com terceiros, sendo armazenados apenas para responder às suas solicitações.</p>
+
+  <h2>3. Como Usamos Seus Dados</h2>
+  <p>Os dados coletados são utilizados exclusivamente para:</p>
+  <ul>
+    <li>Fornecer e otimizar o funcionamento do app dentro do seu dispositivo com base no progresso local.</li>
+    <li>Processar e responder às mensagens enviadas pelo sistema de suporte, utilizando nome, e-mail e descrição do problema para contato e resolução.</li>
+  </ul>
+  <p>Não compartilhamos quaisquer dados com terceiros, exceto quando exigido por lei.</p>
+
+  <h2>4. Armazenamento e Segurança</h2>
+  <p>Os dados de uso são armazenados exclusivamente no seu dispositivo. Os dados de contato (nome, e-mail e descrição do problema) são armazenados em servidores seguros pelo desenvolvedor, com medidas de segurança como criptografia e acesso restrito, sendo mantidos apenas pelo tempo necessário para responder à sua solicitação.</p>
+
+  <h2>5. Seus Direitos e Opções</h2>
+  <p>Como usuário, você tem controle sobre os dados fornecidos:</p>
+  <ul>
+    <li>Excluir os dados de uso apagando o app do seu dispositivo.</li>
+    <li>Solicitar a exclusão dos dados de contato (nome, e-mail e descrição) enviados via caixa de mensagens, entrando em contato pelo e-mail fornecido abaixo.</li>
+  </ul>
+
+  <h3>Exclusão de Dados</h3>
+  <p>Para remover todos os dados associados ao app:</p>
+  <ol>
+    <li>Desinstale o aplicativo Termos Técnicos em Saúde do seu dispositivo.</li>
+  </ol>
+  <p><strong>Observação:</strong> A desinstalação remove todos os dados de uso armazenados localmente. Para exclusão de dados de contato enviados, contate-nos diretamente.</p>
+
+  <h2>6. Contato</h2>
+  <p>Para dúvidas, sugestões, reclamações ou solicitação de exclusão de dados de contato, entre em contato conosco pelo e-mail: <a href="mailto:zeluiz1908@yahoo.com.br">zeluiz1908@yahoo.com.br</a>.</p>
+
+  <h2>7. Alterações nesta Política</h2>
+  <p>Podemos atualizar esta Política de Privacidade periodicamente. Notificaremos você sobre mudanças significativas via atualizações do app. Recomendamos revisar esta página regularmente.</p>
+</body>
+</html>
